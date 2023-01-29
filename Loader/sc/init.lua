@@ -248,36 +248,38 @@ function library.launch(title, description)
 
 	textbox.FocusLost:Connect(function()
 
-		local tween = TweenService:Create(line, TweenInfo.new(0.5), {
-			Size = UDim2.fromScale(0, 0.01),
-			Position = UDim2.fromScale(1, 1.02)
-		})
-		tween:Play()
-		tween.Completed:Wait()
-		line.Visible = false
+		xpcall(function()
+			local tween = TweenService:Create(line, TweenInfo.new(0.5), {
+				Size = UDim2.fromScale(0, 0.01),
+				Position = UDim2.fromScale(1, 1.02)
+			})
+			tween:Play()
+			tween.Completed:Wait()
+			line.Visible = false
 
-        local tType = #self.__keys[1]>=1 and "array" or "dict"
-        local hasKey = false
-		local hasText = textbox.Text == "" and false or true
+			local tType = #self.__keys[1]>=1 and "array" or "dict"
+			local hasKey = false
+			local hasText = textbox.Text == "" and false or true
 
-		for _, value in next, self.__keys do
-            if not hasAgreed then self:PushNotification() break end
-			if tType=="dict" and (textbox.Text == value.Key and Player.UserId == value.Auth) or textbox.Text == value then
-				hasKey = true
-				TweenService:Create(textbox, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {TextColor3 = goals.successfull.Color}):Play()
-				TweenService:Create(textbox_stroke, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {Color = goals.successfull.Color}):Play()
-				break;
+			for _, value in next, self.__keys do
+				if not hasAgreed then self:PushNotification() break end
+				if tType=="dict" and (textbox.Text == value.Key and Player.UserId == value.Auth) or textbox.Text == value then
+					hasKey = true
+					TweenService:Create(textbox, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {TextColor3 = goals.successfull.Color}):Play()
+					TweenService:Create(textbox_stroke, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {Color = goals.successfull.Color}):Play()
+					break;
+				end
 			end
-		end
 
-		if not hasKey and hasText then
-			TweenService:Create(textbox, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {TextColor3 = goals.unsuccessfull.Color}):Play()
-			TweenService:Create(textbox_stroke, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {Color = goals.unsuccessfull.Color}):Play()
-        else
-            TweenService:Create(body, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(0, 0)}):Play()
-            ui:Remove()
-		end
-
+			if not hasKey and hasText then
+				TweenService:Create(textbox, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {TextColor3 = goals.unsuccessfull.Color}):Play()
+				TweenService:Create(textbox_stroke, TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, true, 0), {Color = goals.unsuccessfull.Color}):Play()
+			else
+				TweenService:Create(body, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(0, 0)}):Play()
+				task.wait(1)
+				ui:Remove()
+			end
+		end, warn)
 	end)
 
 	ScrollingFrame.Changed:Connect(function(property)
