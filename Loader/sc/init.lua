@@ -17,6 +17,10 @@ function library.launch(title, description)
 		return;
 	end
 
+	for _, v in next, game.CoreGui:GetChildren() do
+		if v.Name =="ui" then
+			v:Remove() end end
+
 	local ui = Instance.new("ScreenGui")
 	local body = Instance.new("Frame")
 	local shadow = Instance.new("ImageLabel")
@@ -128,7 +132,7 @@ function library.launch(title, description)
 	information_corner.Parent = information
 
 	ScrollingFrame.Parent = information
-	ScrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.XY
+	ScrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	ScrollingFrame.Active = true
 	ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	ScrollingFrame.BackgroundTransparency = 1.000
@@ -220,7 +224,7 @@ function library.launch(title, description)
 
 	body_corner.Name = "body_corner"
 	body_corner.Parent = body
-	
+
 	TweenService:Create(body, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(0.5, 0.8)}):Play()
 
     local hasAgreed = false
@@ -245,7 +249,7 @@ function library.launch(title, description)
 	textbox.FocusLost:Connect(function()
 
 		local tween = TweenService:Create(line, TweenInfo.new(0.5), {
-			Size = UDim2.fromScale(0, 1),
+			Size = UDim2.fromScale(0, 0.01),
 			Position = UDim2.fromScale(1, 1.02)
 		})
 		tween:Play()
@@ -272,7 +276,6 @@ function library.launch(title, description)
         else
             TweenService:Create(body, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(0, 0)}):Play()
             ui:Remove()
-
 		end
 
 	end)
