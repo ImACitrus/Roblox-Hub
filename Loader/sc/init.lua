@@ -39,7 +39,26 @@ function library.launch(title, description)
 	local ignore_2 = Instance.new("TextLabel")
 	local information_gradient = Instance.new("UIGradient")
 	local body_corner = Instance.new("UICorner")
-	local background = Instance.new("Frame")
+
+	local UIStroke = Instance.new("UIStroke")
+	local UIStroke_1 = Instance.new("UIStroke")
+	local UIStroke_2 = Instance.new("UIStroke")
+	
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Color = Color3.fromRGB(25, 25, 25)
+	UIStroke.Thickness = 1
+
+	UIStroke_1.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke_1.Color = Color3.fromRGB(75, 75, 75)
+	UIStroke_1.Thickness = 1
+
+	UIStroke_2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke_2.Color = Color3.fromRGB(75, 75, 75)
+	UIStroke_2.Thickness = 1
+
+	UIStroke.Parent = textbox
+	UIStroke_1.Parent = Agree
+	UIStroke_2.Parent = information
 
 	ui.Name = "ui"
 	ui.Parent = game.CoreGui
@@ -201,15 +220,7 @@ function library.launch(title, description)
 
 	body_corner.Name = "body_corner"
 	body_corner.Parent = body
-
-	background.Name = "background"
-	background.Parent = ui
-	background.AnchorPoint = Vector2.new(0.5, 0.5)
-	background.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-	background.Position = UDim2.new(0.5, 0, 0.5, 0)
-	background.Size = UDim2.new(10, 0, 10, 0)
-	background.ZIndex = 0
-
+	
 	TweenService:Create(body, TweenInfo.new(0.6, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.fromScale(0.5, 0.8)}):Play()
 
     local hasAgreed = false
@@ -226,32 +237,24 @@ function library.launch(title, description)
 		line.Position = UDim2.fromScale(0, 1.02)
 		line.Visible = true
 		TweenService:Create(line, TweenInfo.new(0.5), {
-			Size = UDim2.fromOffset(650, 1),
-			Position = UDim2.fromScale(0.5, 1)
+			Size = UDim2.fromScale(1, 0.01),
+			Position = UDim2.fromScale(0.5, 1.02)
 		}):Play()
 	end)
 
 	textbox.FocusLost:Connect(function()
 
 		local tween = TweenService:Create(line, TweenInfo.new(0.5), {
-			Size = UDim2.fromOffset(0, 1),
-			Position = UDim2.fromScale(1, 1)
+			Size = UDim2.fromScale(0, 1),
+			Position = UDim2.fromScale(1, 1.02)
 		})
 		tween:Play()
 		tween.Completed:Wait()
 		line.Visible = false
 
-        local tType = #self.__keys>=1 and "array" or "dict"  -- dict | array
+        local tType = #self.__keys[1]>=1 and "array" or "dict"
         local hasKey = false
 		local hasText = textbox.Text == "" and false or true
-
-		-- DEBUG:
-		print(
-			"table Type:", tType,"\n",
-			"hasKey:", hasKey,"\n",
-			"hasText:", hasText,"\n"
-			"hasAgreed:", hasAgreed,"\n"
-		)
 
 		for _, value in next, self.__keys do
             if not hasAgreed then self:PushNotification() break end
